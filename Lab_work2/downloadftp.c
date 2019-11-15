@@ -14,7 +14,7 @@
 
 #define FTP_PORT 21
 
-/* FTP WORKS ON APPLICATION LAYER! MAIN GOAL: MOVING FILES ( in our project we are supposed to only download a file)
+// FTP WORKS ON APPLICATION LAYER! MAIN GOAL: MOVING FILES ( in our project we are supposed to only download a file)
 //we need to have two sockets: one for control and one for data
 
 /* main steps:
