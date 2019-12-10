@@ -32,14 +32,23 @@
 - */
 
 int connection(char * IP_host, int port);
+
 void parseArg(char * argv, char* user, char *pass, char *hostName, char* pathFile);
+
 void parseFile(char* pathFile, char* fileName);
+
 char* getIp(char* server_name);
+
 int checkConnection(int socket);
+
 int sendCommandUser(int socket, char* user);
+
 int sendCommandPassword(int socket, char* pass);
-void readResponse(int socket, char *responseCode);
+
+void readResponse(int socket, char *response);
+
 int sendCommandPasvAndGetPort(int socket);
+
 int sendRetrAndGetFile(int socket, char* filename, char *path, int socket_data);
 
 
@@ -56,20 +65,25 @@ int main(int argc, char *argv[]){
     char pass[MAX_STRING];
     char hostName[MAX_STRING];
     char pathFile[MAX_STRING];
+    char pathFileDestroyd[MAX_STRING];
     char fileName[MAX_STRING];
 
     char *IP_host;
     int sockFd_control,sockFd_data, data_port=0;
     char response[3];
-    int aux, aux1, aux2, aux3;
+    int aux=0, aux1=0, aux2=0, aux3=0;
 
     memset(user, 0, MAX_STRING);
     memset(pass, 0, MAX_STRING);
     memset(hostName, 0, MAX_STRING);
     memset(pathFile, 0, MAX_STRING);
+    memset(fileName, 0, MAX_STRING);
     
     parseArg(argv[1], user, pass, hostName, pathFile);
-    parseFile(pathFile, fileName);
+
+    strcpy(pathFileDestroyd,pathFile);
+    parseFile(pathFileDestroyd, fileName);
+
     printf("-> user:%s\n", user);
     printf("-> pass:%s\n", pass);
     printf("-> host name:%s\n", hostName);
@@ -77,24 +91,34 @@ int main(int argc, char *argv[]){
     printf("-> fileName:%s\n\n\n", fileName);
 
     IP_host=getIp(hostName);    
+
+    /*if(IP_host == NULL){
+
+        perror("getIP():");
+    }*/
     printf("> Trying: %s...\n", IP_host);
 
     sockFd_control=connection(IP_host, FTP_PORT);
-    aux=checkConnection(sockFd_control);
 
-    if(aux==1){
+    checkConnection(sockFd_control);
 
-        aux1=sendCommandUser(sockFd_control, user);
+    aux1=sendCommandUser(sockFd_control, user);
+
+
+    if(aux1==1){
+
+         aux2=sendCommandPassword(sockFd_control, pass);
     }
     else{
 
         close(sockFd_control);
         exit(1);
+        return 0;
     }
 
-    if(aux==1){
+    if(aux2==1){
 
-        aux2=sendCommandPassword(sockFd_control, pass);
+        data_port=sendCommandPasvAndGetPort(sockFd_control);
     }
     else {
 
@@ -102,11 +126,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    if(aux2==1){
-
-        data_port=sendCommandPasvAndGetPort(sockFd_control);
-        
-    }
+    
     /*********** PASSIVE FROM NOW ON************/
 
     sockFd_data=connection(IP_host, data_port);
@@ -202,38 +222,36 @@ void parseArg(char * argv, char * user, char* pass, char* hostName, char* fileNa
     for(int i=0; i<strlen(fileName_aux); i++){
         fileName[l++]=*(fileName_aux+i);
     }
-
-
-
 }
 
 void parseFile(char* pathFile, char* fileName){
 
-    int indexPathFile = 0;
-	int indexFileName = 0;
-	memset(fileName, 0, MAX_STRING);
+   
+    char *user_aux;
+    char *fileName_aux;
+    int l=0;
 
-	for(indexPathFile=0;indexPathFile< strlen(pathFile); indexPathFile++){
+    user_aux=strtok(pathFile, "/");
 
-		if(pathFile[indexPathFile]=='/'){
-			indexFileName = 0;
-			memset(fileName, 0, MAX_STRING);
-			
-		}
-		else{
-			fileName[indexFileName] = pathFile[indexPathFile];
-			indexFileName++;
-		}
-	}
+    while((user_aux=strtok(0, "/"))!= NULL){
+       
+        fileName_aux=user_aux;
+    }
+
+    for(int i=0; i<strlen(fileName_aux); i++){    
+        fileName[l++]=*(fileName_aux+i);
+    }
+    
 }
 
 void readResponse(int socketfd, char *responseCode){
 
     int state = 0;
-	int index = 0;
+	int i = 0;
 	char c;
+    int done=0;
 
-	while (state != 3)
+	while (!done)
 	{	
 		read(socketfd, &c, 1);
 		//printf("%c", c);
@@ -243,12 +261,12 @@ void readResponse(int socketfd, char *responseCode){
 		case 0:
 			if (c == ' ')
 			{
-				if (index != 3)
+				if (i != 3)
 				{
 					printf("> Error receiving response code\n");
 					return;
 				}
-				index = 0;
+				i = 0;
 				state = 1;
 			}
 			else
@@ -256,14 +274,14 @@ void readResponse(int socketfd, char *responseCode){
 				if (c == '-')
 				{
 					state = 2;
-					index=0;
+					i=0;
 				}
 				else
 				{
 					if (isdigit(c))
 					{
-						responseCode[index] = c;
-						index++;
+						responseCode[i] = c;
+						i++;
 					}
 				}
 			}
@@ -272,25 +290,25 @@ void readResponse(int socketfd, char *responseCode){
 		case 1:
 			if (c == '\n')
 			{
-				state = 3;
+				done=1;
 			}
 			break;
 		//waits for response code in multiple line responses
 		case 2:
-			if (c == responseCode[index])
+			if (c == responseCode[i])
 			{
-				index++;
+				i++;
 			}
 			else
 			{
-				if (index == 3 && c == ' ')
+				if (i == 3 && c == ' ')
 				{
 					state = 1;
 				}
 				else 
 				{
-				  if(index==3 && c=='-'){
-					index=0;
+				  if(i==3 && c=='-'){
+					i=0;
 					
 				}
 				}
@@ -332,13 +350,13 @@ int sendCommandUser(int socket, char* user){
 
     write(socket,"user ",5);
     write(socket,user, strlen(user));
-    write(socket,"\n",1);
+    write(socket,"\r\n",2);
 
     readResponse(socket, response);
     
     if( strcmp(response, "331")==0){
 
-        printf("> Sending password\n");
+        printf("> Sending password...\n");
         return 1;
     }
 
@@ -359,7 +377,7 @@ int sendCommandPassword(int socket, char* pass){
 
     write(socket,"pass ",5);
     write(socket,pass, strlen(pass));
-    write(socket,"\n",1);
+    write(socket,"\r\n",2);
 
     readResponse(socket, response);
     
@@ -390,7 +408,7 @@ int sendCommandPasvAndGetPort(int socket){
     int l=0, j=0;
     int getDigits[6];
 
-    write(socket, "pasv\n", 5);
+    write(socket, "pasv\r\n", 6);
 
     while(c != ')'){
 
@@ -434,7 +452,7 @@ int sendRetrAndGetFile(int socket, char* filename, char *path, int socket_data){
 
     write(socket,"retr ",5);
     write(socket,path, strlen(path));
-    write(socket,"\n",1);
+    write(socket,"\r\n",2);
 
     readResponse(socket, response);
 
@@ -444,6 +462,10 @@ int sendRetrAndGetFile(int socket, char* filename, char *path, int socket_data){
         
         while((bytes= read(socket_data, buff,100))>0){
             bytes=fwrite(buff,bytes,1,file);
+            if(bytes<0){
+
+                printf("Error writing to the file\n");
+            }
         }
 
         printf("> File downloading complete!\n");

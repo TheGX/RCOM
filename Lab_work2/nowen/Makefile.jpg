@@ -1,0 +1,10 @@
+all: FTP_functions.o functions.o main.o
+	gcc -o main main.o functions.o FTP_functions.o
+	rm *.o
+	clear
+functions.o: functions.c functions.h
+	gcc -c functions.c -o functions.o
+FTP_functions.o: FTP_functions.c FTP_functions.h
+	gcc -c FTP_functions.c -o FTP_functions.o
+main.o: main.c
+	gcc -c main.c -o main.o

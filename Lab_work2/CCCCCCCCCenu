@@ -1,0 +1,216 @@
+<HTML>
+<HEAD>
+<TITLE>CPAN.html</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000">
+<CENTER>
+<FONT SIZE=+2><B>Welcome to the Comprehensive Perl Archive Network!</B></FONT>
+<BR>
+Last updated: Fri Oct 26 2001</CENTER>
+
+<BLOCKQUOTE>
+<P>
+
+CPAN contains the collected wisdom of the entire Perl community:
+hundreds of Perl utilities, several books' worth of documentation, and
+the entire Perl distribution.  If it's written in Perl, and it's
+helpful and free, it's in CPAN.    
+
+<P>
+
+The CPAN architecture is the creation of <A
+HREF="mailto:Jarkko.Hietaniemi@iki.fi">Jarkko Hietaniemi</A> and <A
+HREF="mailto:a.koenig@franz.ww.tu-berlin.de">Andreas K&ouml;nig</A>.
+Andreas and <A HREF="mailto:Tim.Bunce@ig.co.uk">Tim Bunce</A> jointly
+maintain the <A HREF="./modules/00modlist.long.html">The Perl 5 Module
+List</A>, which is like this document but has more about creating
+modules and less about what existing modules do.  (If you just want to
+install Perl, you can grab <A HREF="./src/">the Perl distribution from
+the CPAN</A>.)
+
+<P>
+
+This document is <B>CPAN.html</B>, a "front end" to CPAN.  Part of
+this document is about <A HREF="#contents">what's in CPAN</A> and
+part is about how you can contribute to this worldwide effort by <A
+HREF="#howyoucanhelp">submitting utilities</A> for the rest of the
+world to use.  The bulk of this document used to be descriptions of
+all the modules in CPAN, but now there are too many modules for that,
+and the best we can do at the moment is refer you to the smooth and
+speedy <A HREF="http://search.cpan.org">search.cpan.org</A> so that
+you can enter search terms to find utilities.
+
+<P>
+
+<H3> What's a module? </H3>
+
+You'll find a technical explanation in <A
+HREF="./doc/manual/html/pod/perlmod.html"> the
+perlmod documentation</A>, but here's the gist: a module is a freely
+available Perl 5 utility that you can download and use from your Perl
+5 programs.  Many modules are single Perl files ending in
+<CODE>.pm</CODE>.  Others are more complex, and need to be compiled on
+your machine, typically because they make use of C under the
+hood.
+
+<P>
+
+Another difficulty is that some modules depend on others.  While the
+CPAN administrators, module writers, and Makemaker gurus have tried to
+make downloading and installing modules as easy as possible (and see
+Andreas K&ouml;nig's <A
+HREF="./modules/by-module/CPAN">CPAN.pm</A>
+module for a way to automate the process), it's a little frustrating
+to install a sleek new module only to find that it depends on
+something you don't have.  That's where CPAN <B>bundles</B> come in: a
+bundle is a colllection of modules that comprise a cohesive unit, like
+the <A
+HREF="./modules/by-module/LWP">libwww</A>
+bundle, which contains lots of modules to help you tangle with the
+World Wide Web.
+
+<P>
+
+If you clicked on the above link CPAN.pm, or libwww, you (hopefully!)
+were transported to directories containing the appropriate files.
+Which machine served them to you?  I don't know.  It depends on where
+you're connecting from.  That's the beauty of Tom Christiansen's <A
+HREF="http://www.perl.com/CPAN">CPAN multiplexer</A>: it automagically
+reroutes you to a nearby CPAN site, for some definition of "nearby."
+(If it doesn't work, perhaps the site is busy, and you should try
+again.)  If you don't like the multiplexer's choice of site, select
+one from <A HREF="SITES.html">the list of CPAN sites</A>.
+
+<A NAME="contents"><H2> What's on CPAN? </H2>
+
+<P> The <A HREF="http://www.perl.com/CPAN/">CPAN</A> has a dozen-odd
+top-level entries.
+
+<BR><BR>
+<UL> 
+<LI><CODE><B>CPAN.html </B></CODE> This file.
+<LI><CODE><B>ENDINGS</B> </CODE> What file extensions like .zip and .gz and .tar mean.
+<LI><CODE><B>MIRRORED.BY </B></CODE> Information about sites mirroring this one.
+<LI><CODE><B>MIRRORING.FROM </B></CODE> Information about sites this one mirrors.
+<LI><CODE><B>README</B> </CODE> and <CODE><B>README.html</B></CODE> A brief introduction to CPAN.
+<LI><CODE><B>RECENT</B> </CODE> and <CODE><B>RECENT.html</B></CODE> What's changed recently in CPAN.
+<LI><CODE><B>authors/ </B></CODE> modules (and extensions), listed by author
+<LI><CODE><B>clpa/ </B></CODE> archive of the comp.lang.perl.announce Usenet newsgroup
+<LI><CODE><B>doc/ </B></CODE> Perl documentation and FAQs
+<LI><CODE><B>indices/ </B></CODE> various index views of CPAN
+<LI><CODE><B>misc/ </B></CODE> Miscellany: 
+<LI><CODE><B>modules/ </B></CODE> modules (and extensions), listed by module name
+<LI><CODE><B>ports/ </B></CODE> non-UNIX Perl ports, both as executables and source
+<LI><CODE><B>scripts/ </B></CODE> Perl utilities that aren't modules.  New submissions are now being accepted, thanks to Kurt Starsinic; send mail to <A HREF="mailto:scripts@perl.org">scripts@perl.org</A> for more information.
+<LI><CODE><B>src/ </B></CODE> The Perl distribution.
+</UL>
+
+<P><B>IF YOU'RE SEARCHING FOR A PARTICULAR UTILITY,</B> use 
+<A HREF="http://search.cpan.org">http://search.cpan.org</A>
+to find it.  There are more other CPAN search utilities: <A
+HREF="http://ls6-www.informatik.uni-dortmund.de/CPAN.html">WAIT</A>,
+which uses approximate matching to search module documentation, and
+Randy Kobes' <A HREF="http://theory.uwinnipeg.ca/search/cpan-search.html">CPAN
+Search Engine</A>, which lets you throw boolean queries against CPAN
+module names, files and directories, author names, and the Perl
+documentation.
+
+<P>The easiest way to install a module on CPAN is to use the <A
+HREF="#cpan">CPAN.pm</A> module.  Of course, you'll need to install
+<I>that</I> the hard way; see <A HREF="./doc/manual/html/pod/perlmodinstall.html">my perlmodinstall documentation</A> (bundled with Perl) for instructions on how to manually install modules.
+
+<P>To use a module, you must a) install it, and b) place <TT>use YourModuleName;</TT>" near the top of your program.
+
+<P><B>WHAT ABOUT DOCUMENTATION?</B> 
+
+In Perl, there is a convention of embedding documentation inside your
+source code.  (That way, you never lose it.)  This embedded
+documentation is in a format called "pod" (for Plain Old
+Documentation); when you look through a module and see lines like
+=head1 or =cut, that's pod.  Pod is designed to be easily readable and
+translatable into whatever format you like.  Use one of the programs
+in the pod2x directory (in your Perl distribution) to extract the
+documentation and convert to HTML, FrameMaker, a Unix man page,
+TeXinfo, or just plain text.
+
+<P><B>IF YOU'RE LOOKING FOR AN ANSWER TO A PERL QUESTION,</B> the
+first thing to do is read <A
+HREF="./doc/FAQs/FAQ/html">The Perl FAQ</A>.
+There are other, more specialized, FAQs in the <A
+HREF="./doc/FAQs/">FAQs directory</A>.
+
+<P><B>IF YOU'D LIKE TO READ THE PERL DOCUMENTATION,</B> good for you!
+Pick an appropriate directory in <A
+HREF="http://language.perl.com/CPAN/doc/manual/html">doc/manual/html</A>.  I
+recommend starting with <A
+HREF="http://language.perl.com/CPAN/doc/manual/html/perl.html">perl.html</A>,
+which contains links to all other sections of the documentation.
+
+<A NAME="howyoucanhelp">
+<BLOCKQUOTE> <FONT SIZE=+2><B>How You Can Help</B></FONT><FONT SIZE=-1>-- derived from the original CPAN.html by Jarkko Hietaniemi</FONT>
+
+<H3><A NAME="feedback">Comment</A></H3>
+
+You can <A HREF="mailto:cpan@perl.org">send email</A> to the CPAN
+administrators, <TT>cpan@perl.org</TT>.  We especially love the
+half-dozen of you that have us confused with C-SPAN, the U.S. politics
+cable channel, which has happened about a half-dozen times.  ("Yes,
+we'll make it our top priority to give Ralph Nader more CPAN
+coverage.  Thanks for your support!")
+
+<H3>Inform</H3>
+
+<P>If you know of some Perl resources that seem not to be in CPAN,
+please tell us.  We will grab it (if it is
+small and/or stable) or set up regular mirroring (if it is not).</P>
+
+<H3>Contribute</H3>
+
+<P>If you have some modules/scripts/documentation yourself that you
+would like to contribute to CPAN, please read the file <A
+HREF="./modules/04pause.html">modules/04pause.html</A>
+and let us know.</P>
+
+<H3><A NAME="register">Register</A></H3>
+
+<P>If you have a reliable and well-connected ftp site where you can
+keep CPAN (about 750 MB currently), more mirror sites are welcome.
+Feel free to volunteer and contact the CPAN administrators describing
+your mirroring setup, please see the top of the file <A
+HREF="./MIRRORED.BY">MIRRORED.BY</A> Of course,
+first check (see the <A HREF="#hostlist">host list</A>) whether
+your area (network-connectivity-and-bandwidth-wise) is already well
+covered. Redundancy and fault-tolerance are good things for FTP
+archives like CPAN but virtues can be exaggerated. Mirroring software
+<A
+HREF="./scripts/ftpstuff/mirror-2.8.tar.gz">is
+available</A> from CPAN itself.</P>
+
+<H3><A NAME="private">Private/Local Mirroring</A></H3>
+
+<P>If you want to set up a <EM>private/local</EM> mirror of CPAN but
+do not want to advertise it you do not need to contact the CPAN
+admistrators. You need to assess which of the <EM>public</EM> CPAN
+sites would give the best FTP bandwidth for you (during the
+nighttime, mind) and then contact the email address <B>dst_contact</B>
+given in the <TT>MIRRORED.BY</TT> file to learn the best time of the
+day to do your mirror. 
+<A HREF="./scripts/ftpstuff/mirror-2.3.tar.gz">Mirroring software</A> is available from CPAN itself.</P>
+
+</BLOCKQUOTE>
+
+
+<P><CENTER><FONT SIZE=+2><B>Copyright</B></FONT></CENTER> This
+document is Copyright 1996, 1997, 1998, 2000 Jon Orwant.  All Rights
+Reserved.  The CPAN itself is a collection of individual works, many
+of which have their own copyright statements; you'll have to look at
+the individual work to determine the distribution terms.  Most 
+are licensed under the same terms as Perl itself, which means
+that you can freely copy it under either the Gnu GPL or Larry Wall's
+Artistic License -- your choice.
+
+<P>Enjoy!</P>
+
+</BLOCKQUOTE>
+</BODY>
+</HTML>
