@@ -251,71 +251,11 @@ void readResponse(int socketfd, char *responseCode){
 	char c;
     int done=0;
 
-	while (!done)
-	{	
-		read(socketfd, &c, 1);
-		//printf("%c", c);
-		switch (state)
-		{
-		//waits for 3 digit number followed by ' ' or '-'
-		case 0:
-			if (c == ' ')
-			{
-				if (i != 3)
-				{
-					printf("> Error receiving response code\n");
-					return;
-				}
-				i = 0;
-				state = 1;
-			}
-			else
-			{
-				if (c == '-')
-				{
-					state = 2;
-					i=0;
-				}
-				else
-				{
-					if (isdigit(c))
-					{
-						responseCode[i] = c;
-						i++;
-					}
-				}
-			}
-			break;
-		//reads until the end of the line
-		case 1:
-			if (c == '\n')
-			{
-				done=1;
-			}
-			break;
-		//waits for response code in multiple line responses
-		case 2:
-			if (c == responseCode[i])
-			{
-				i++;
-			}
-			else
-			{
-				if (i == 3 && c == ' ')
-				{
-					state = 1;
-				}
-				else 
-				{
-				  if(i==3 && c=='-'){
-					i=0;
-					
-				}
-				}
-				
-			}
-			break;
-		}
+    while('1' <= c && c <= '5' || c != " "){ //Space means waiting for input
+        
+        read(socketfd, &c, 1);
+        responseCode[i] = c;
+        i++;
 	}
 }
 
